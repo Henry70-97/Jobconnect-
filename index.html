@@ -1,0 +1,1625 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WordQuest - Earn While You Learn</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Poppins', sans-serif; }
+        .gradient-bg { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .card-hover { transition: transform 0.3s ease, box-shadow 0.3s ease; }
+        .card-hover:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
+        .pulse-animation { animation: pulse 2s infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg fixed w-full top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <button onclick="showPage('welcome')" class="text-2xl font-bold text-purple-600 hover:text-purple-700">📚 WordQuest</button>
+                </div>
+                
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex space-x-4" id="desktop-menu">
+                    <button onclick="showPage('login')" class="text-gray-700 hover:text-purple-600 px-3 py-2 rounded-md transition-colors">Log In</button>
+                    <button onclick="showPage('signup')" class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors">Sign Up</button>
+                </div>
+
+                <!-- Hamburger Menu Button -->
+                <button onclick="toggleMobileMenu()" class="md:hidden flex flex-col justify-center items-center w-8 h-8 space-y-1" id="hamburger-btn">
+                    <span class="block w-6 h-0.5 bg-gray-600 transition-all duration-300" id="line1"></span>
+                    <span class="block w-6 h-0.5 bg-gray-600 transition-all duration-300" id="line2"></span>
+                    <span class="block w-6 h-0.5 bg-gray-600 transition-all duration-300" id="line3"></span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div class="md:hidden bg-white border-t hidden" id="mobile-menu">
+            <div class="px-4 py-4 space-y-3">
+                <button onclick="showPage('welcome')" class="block w-full text-left px-3 py-2 text-gray-700 hover:text-purple-600 hover:bg-purple-50 rounded-md transition-colors">🏠 Home</button>
+                <button onclick="showPage('login')" class="block w-full text-left px-3 py-2 text-gray-700 hover:text-purple-600 hover:bg-purple-50 rounded-md transition-colors">🔑 Log In</button>
+                <button onclick="showPage('signup')" class="block w-full text-left px-3 py-2 bg-purple-600 text-white hover:bg-purple-700 rounded-md transition-colors">🚀 Sign Up</button>
+                <div class="pt-2 border-t" id="user-menu-items" style="display: none;">
+                    <button onclick="showPage('dashboard')" class="block w-full text-left px-3 py-2 text-gray-700 hover:text-purple-600 hover:bg-purple-50 rounded-md transition-colors">📊 Dashboard</button>
+                    <button onclick="showPage('games')" class="block w-full text-left px-3 py-2 text-gray-700 hover:text-purple-600 hover:bg-purple-50 rounded-md transition-colors">🎮 Games</button>
+                    <button onclick="showPage('wallet')" class="block w-full text-left px-3 py-2 text-gray-700 hover:text-purple-600 hover:bg-purple-50 rounded-md transition-colors">💰 Wallet</button>
+                    <button onclick="showPage('referral')" class="block w-full text-left px-3 py-2 text-gray-700 hover:text-purple-600 hover:bg-purple-50 rounded-md transition-colors">👥 Referrals</button>
+                    <button onclick="showPage('leaderboard')" class="block w-full text-left px-3 py-2 text-gray-700 hover:text-purple-600 hover:bg-purple-50 rounded-md transition-colors">🏆 Leaderboard</button>
+                    <button onclick="logout()" class="block w-full text-left px-3 py-2 text-red-600 hover:bg-red-50 rounded-md transition-colors">🚪 Logout</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Welcome Landing Page -->
+    <div id="welcome-page" class="page">
+        <div class="gradient-bg min-h-screen flex items-center justify-center">
+            <div class="text-center text-white px-4">
+                <div class="mb-8">
+                    <div class="text-8xl mb-6">📚</div>
+                    <h1 class="text-6xl font-bold mb-4">WordQuest</h1>
+                    <p class="text-2xl mb-8 opacity-90">Where Literature Meets Rewards</p>
+                </div>
+                
+                <div class="space-y-4 max-w-md mx-auto">
+                    <button onclick="showPage('homepage')" class="w-full bg-white text-purple-600 px-8 py-4 rounded-xl font-bold text-lg hover:bg-gray-100 transform hover:scale-105 transition-all shadow-lg">
+                        🚀 Get Started
+                    </button>
+                    <p class="text-sm opacity-75">Join thousands of players earning while learning!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Homepage -->
+    <div id="homepage-page" class="page hidden">
+        <div class="gradient-bg min-h-screen pt-16">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+                <!-- Back Button -->
+                <button onclick="showPage('welcome')" class="mb-8 flex items-center text-white hover:text-gray-200 transition-colors">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                    </svg>
+                    Back
+                </button>
+
+                <div class="text-center text-white mb-16">
+                    <h1 class="text-5xl font-bold mb-6">📚 WordQuest</h1>
+                    <p class="text-xl mb-8 max-w-3xl mx-auto">Earn while you learn – Play English literature games, test your knowledge, and win rewards!</p>
+                    <div class="flex flex-col sm:flex-row justify-center gap-4 mb-12">
+                        <button onclick="showPage('signup')" class="bg-white text-purple-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transform hover:scale-105 transition-all">🚀 Sign Up Now</button>
+                        <button onclick="showPage('login')" class="border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-purple-600 transition-all">🔑 Already a Member?</button>
+                    </div>
+                </div>
+                
+                <!-- Features Section -->
+                <div class="grid md:grid-cols-3 gap-8 mb-16">
+                    <div class="bg-white rounded-xl p-6 card-hover">
+                        <div class="text-4xl mb-4">🧩</div>
+                        <h3 class="text-xl font-semibold mb-2">Word Puzzles</h3>
+                        <p class="text-gray-600">Challenge yourself with crosswords, anagrams, and word searches</p>
+                    </div>
+                    <div class="bg-white rounded-xl p-6 card-hover">
+                        <div class="text-4xl mb-4">💰</div>
+                        <h3 class="text-xl font-semibold mb-2">Earn Real Money</h3>
+                        <p class="text-gray-600">Win points and convert them to USD, KSH via M-Pesa, PayPal</p>
+                    </div>
+                    <div class="bg-white rounded-xl p-6 card-hover">
+                        <div class="text-4xl mb-4">🏆</div>
+                        <h3 class="text-xl font-semibold mb-2">Compete & Win</h3>
+                        <p class="text-gray-600">Join tournaments and climb the leaderboards</p>
+                    </div>
+                </div>
+
+                <!-- How It Works -->
+                <div class="bg-white bg-opacity-10 rounded-2xl p-8 mb-16">
+                    <h2 class="text-3xl font-bold text-white text-center mb-8">How It Works</h2>
+                    <div class="grid md:grid-cols-4 gap-6">
+                        <div class="text-center text-white">
+                            <div class="w-16 h-16 bg-white bg-opacity-20 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl">1️⃣</div>
+                            <h3 class="font-semibold mb-2">Sign Up</h3>
+                            <p class="text-sm opacity-90">Create your free account</p>
+                        </div>
+                        <div class="text-center text-white">
+                            <div class="w-16 h-16 bg-white bg-opacity-20 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl">2️⃣</div>
+                            <h3 class="font-semibold mb-2">Play Games</h3>
+                            <p class="text-sm opacity-90">Choose from various literature games</p>
+                        </div>
+                        <div class="text-center text-white">
+                            <div class="w-16 h-16 bg-white bg-opacity-20 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl">3️⃣</div>
+                            <h3 class="font-semibold mb-2">Earn Points</h3>
+                            <p class="text-sm opacity-90">Win points for correct answers</p>
+                        </div>
+                        <div class="text-center text-white">
+                            <div class="w-16 h-16 bg-white bg-opacity-20 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl">4️⃣</div>
+                            <h3 class="font-semibold mb-2">Cash Out</h3>
+                            <p class="text-sm opacity-90">Convert points to real money</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stats -->
+                <div class="grid md:grid-cols-3 gap-8 text-center text-white">
+                    <div>
+                        <div class="text-4xl font-bold mb-2">10K+</div>
+                        <div class="text-lg opacity-90">Active Players</div>
+                    </div>
+                    <div>
+                        <div class="text-4xl font-bold mb-2">$50K+</div>
+                        <div class="text-lg opacity-90">Paid Out</div>
+                    </div>
+                    <div>
+                        <div class="text-4xl font-bold mb-2">100+</div>
+                        <div class="text-lg opacity-90">Games Available</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sign Up Page -->
+    <div id="signup-page" class="page hidden">
+        <div class="min-h-screen pt-16 bg-gray-50 flex items-center justify-center">
+            <div class="max-w-md w-full bg-white rounded-xl shadow-lg p-8">
+                <!-- Back Button -->
+                <button onclick="goBack()" class="mb-6 flex items-center text-gray-600 hover:text-purple-600 transition-colors">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                    </svg>
+                    Back
+                </button>
+                <h2 class="text-3xl font-bold text-center mb-8">Join WordQuest</h2>
+                <form onsubmit="handleSignup(event)">
+                    <div class="mb-4">
+                        <label class="block text-gray-700 text-sm font-bold mb-2">Email</label>
+                        <input type="email" required class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-purple-500">
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-700 text-sm font-bold mb-2">Password</label>
+                        <input type="password" required class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-purple-500">
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-700 text-sm font-bold mb-2">Username</label>
+                        <input type="text" required class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-purple-500">
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-700 text-sm font-bold mb-2">Country</label>
+                        <select class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-purple-500">
+                            <option>Kenya</option>
+                            <option>Uganda</option>
+                            <option>Tanzania</option>
+                            <option>Other</option>
+                        </select>
+                    </div>
+                    <div class="mb-6">
+                        <label class="block text-gray-700 text-sm font-bold mb-2">Referral Code (Optional)</label>
+                        <input type="text" class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-purple-500">
+                    </div>
+                    <div class="mb-6">
+                        <label class="flex items-start">
+                            <input type="checkbox" required class="mt-1 mr-2">
+                            <span class="text-sm text-gray-600">I agree to the Terms and Conditions. I understand that WordQuest may require my support to enhance the platform, and by clicking accept, I am bound to rules which may change without notice.</span>
+                        </label>
+                    </div>
+                    <button type="submit" class="w-full bg-purple-600 text-white py-2 rounded-lg hover:bg-purple-700 font-semibold">Create Account</button>
+                </form>
+                <div class="mt-6 text-center">
+                    <p class="text-gray-600 mb-4">Or sign up with:</p>
+                    <div class="flex space-x-4">
+                        <button class="flex-1 bg-red-500 text-white py-2 rounded-lg hover:bg-red-600">Google</button>
+                        <button class="flex-1 bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700">Facebook</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Login Page -->
+    <div id="login-page" class="page hidden">
+        <div class="min-h-screen pt-16 bg-gray-50 flex items-center justify-center">
+            <div class="max-w-md w-full bg-white rounded-xl shadow-lg p-8">
+                <!-- Back Button -->
+                <button onclick="goBack()" class="mb-6 flex items-center text-gray-600 hover:text-purple-600 transition-colors">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                    </svg>
+                    Back
+                </button>
+                <h2 class="text-3xl font-bold text-center mb-8">Welcome Back</h2>
+                <form onsubmit="handleLogin(event)">
+                    <div class="mb-4">
+                        <label class="block text-gray-700 text-sm font-bold mb-2">Email</label>
+                        <input type="email" required class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-purple-500">
+                    </div>
+                    <div class="mb-6">
+                        <label class="block text-gray-700 text-sm font-bold mb-2">Password</label>
+                        <input type="password" required class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:border-purple-500">
+                    </div>
+                    <button type="submit" class="w-full bg-purple-600 text-white py-2 rounded-lg hover:bg-purple-700 font-semibold">Log In</button>
+                </form>
+                <div class="mt-6 text-center">
+                    <p class="text-gray-600 mb-4">Or log in with:</p>
+                    <div class="flex space-x-4">
+                        <button class="flex-1 bg-red-500 text-white py-2 rounded-lg hover:bg-red-600">Google</button>
+                        <button class="flex-1 bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700">Facebook</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dashboard -->
+    <div id="dashboard-page" class="page hidden">
+        <div class="min-h-screen pt-16 bg-gray-50">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                <!-- Profile Header -->
+                <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center space-x-4">
+                            <div class="w-16 h-16 bg-purple-600 rounded-full flex items-center justify-center text-white text-2xl font-bold">
+                                <span id="user-avatar">U</span>
+                            </div>
+                            <div>
+                                <h2 class="text-2xl font-bold" id="username">Player123</h2>
+                                <div class="flex space-x-4 text-sm text-gray-600">
+                                    <span>Points: <span id="user-points" class="font-semibold text-purple-600">1,250</span></span>
+                                    <span>USD: <span id="user-usd" class="font-semibold text-green-600">$10.00</span></span>
+                                    <span>KSH: <span id="user-ksh" class="font-semibold text-blue-600">1,300</span></span>
+                                </div>
+                                <div class="flex items-center space-x-2 mt-1">
+                                    <span class="text-sm">Level: Scholar</span>
+                                    <span id="user-status" class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">Premium</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <div class="text-sm text-gray-600 mb-2">Progress to Master</div>
+                            <div class="w-48 bg-gray-200 rounded-full h-2">
+                                <div class="bg-purple-600 h-2 rounded-full" style="width: 65%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="grid md:grid-cols-4 gap-6 mb-8">
+                    <button onclick="showPage('games')" class="bg-gradient-to-r from-purple-500 to-pink-500 text-white p-6 rounded-xl card-hover text-center">
+                        <div class="text-3xl mb-2">🎮</div>
+                        <div class="font-semibold">Play Games</div>
+                    </button>
+                    <button onclick="showPage('wallet')" class="bg-gradient-to-r from-green-500 to-blue-500 text-white p-6 rounded-xl card-hover text-center">
+                        <div class="text-3xl mb-2">💰</div>
+                        <div class="font-semibold">Wallet</div>
+                    </button>
+                    <button onclick="showPage('referral')" class="bg-gradient-to-r from-orange-500 to-red-500 text-white p-6 rounded-xl card-hover text-center">
+                        <div class="text-3xl mb-2">👥</div>
+                        <div class="font-semibold">Referrals</div>
+                    </button>
+                    <button onclick="showPage('leaderboard')" class="bg-gradient-to-r from-yellow-500 to-orange-500 text-white p-6 rounded-xl card-hover text-center">
+                        <div class="text-3xl mb-2">🏆</div>
+                        <div class="font-semibold">Leaderboard</div>
+                    </button>
+                </div>
+
+                <!-- Recent Activity -->
+                <div class="bg-white rounded-xl shadow-lg p-6">
+                    <h3 class="text-xl font-bold mb-4">Recent Activity</h3>
+                    <div class="space-y-3">
+                        <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">✓</div>
+                                <span>Completed Word Search Challenge</span>
+                            </div>
+                            <span class="text-green-600 font-semibold">+45 points</span>
+                        </div>
+                        <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">👥</div>
+                                <span>Friend joined via referral</span>
+                            </div>
+                            <span class="text-blue-600 font-semibold">+50 points</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Games Page -->
+    <div id="games-page" class="page hidden">
+        <div class="min-h-screen pt-16 bg-gray-50">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                <!-- Back Button -->
+                <button onclick="showPage('dashboard')" class="mb-6 flex items-center text-gray-600 hover:text-purple-600 transition-colors">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                    </svg>
+                    Back to Dashboard
+                </button>
+                <h2 class="text-3xl font-bold mb-8">Choose Your Game</h2>
+                
+                <!-- Game Categories -->
+                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                    <!-- Word & Vocabulary -->
+                    <div class="bg-white rounded-xl shadow-lg p-6 card-hover">
+                        <div class="text-4xl mb-4">📝</div>
+                        <h3 class="text-xl font-bold mb-2">Word & Vocabulary</h3>
+                        <p class="text-gray-600 mb-4">Test your word skills</p>
+                        <div class="space-y-2 max-h-64 overflow-y-auto">
+                            <button onclick="startGame('crossword-classic')" class="w-full bg-purple-100 text-purple-700 py-2 rounded-lg hover:bg-purple-200 flex justify-between items-center px-3">
+                                <span>📝 Classic Crossword</span>
+                                <span class="text-sm">25-50 pts</span>
+                            </button>
+                            <button onclick="startGame('wordsearch-literature')" class="w-full bg-purple-100 text-purple-700 py-2 rounded-lg hover:bg-purple-200 flex justify-between items-center px-3">
+                                <span>🔍 Literature Word Search</span>
+                                <span class="text-sm">15-35 pts</span>
+                            </button>
+                            <button onclick="startGame('anagrams-authors')" class="w-full bg-purple-100 text-purple-700 py-2 rounded-lg hover:bg-purple-200 flex justify-between items-center px-3">
+                                <span>🔤 Author Anagrams</span>
+                                <span class="text-sm">20-40 pts</span>
+                            </button>
+                            <button onclick="startGame('synonym-match')" class="w-full bg-purple-100 text-purple-700 py-2 rounded-lg hover:bg-purple-200 flex justify-between items-center px-3">
+                                <span>🎯 Synonym Match</span>
+                                <span class="text-sm">18-30 pts</span>
+                            </button>
+                            <button onclick="startGame('antonym-pairs')" class="w-full bg-purple-100 text-purple-700 py-2 rounded-lg hover:bg-purple-200 flex justify-between items-center px-3">
+                                <span>⚖️ Antonym Pairs</span>
+                                <span class="text-sm">18-30 pts</span>
+                            </button>
+                            <button onclick="startGame('word-builder')" class="w-full bg-purple-100 text-purple-700 py-2 rounded-lg hover:bg-purple-200 flex justify-between items-center px-3">
+                                <span>🧱 Word Builder</span>
+                                <span class="text-sm">22-45 pts</span>
+                            </button>
+                            <button onclick="startGame('rhyme-time')" class="w-full bg-purple-100 text-purple-700 py-2 rounded-lg hover:bg-purple-200 flex justify-between items-center px-3">
+                                <span>🎵 Rhyme Time</span>
+                                <span class="text-sm">16-28 pts</span>
+                            </button>
+                            <button onclick="startGame('vocabulary-ladder')" class="w-full bg-purple-100 text-purple-700 py-2 rounded-lg hover:bg-purple-200 flex justify-between items-center px-3">
+                                <span>🪜 Vocabulary Ladder</span>
+                                <span class="text-sm">25-55 pts</span>
+                            </button>
+                            <button onclick="startGame('letter-scramble')" class="w-full bg-purple-100 text-purple-700 py-2 rounded-lg hover:bg-purple-200 flex justify-between items-center px-3">
+                                <span>🌪️ Letter Scramble</span>
+                                <span class="text-sm">12-25 pts</span>
+                            </button>
+                            <button onclick="startGame('word-association')" class="w-full bg-purple-100 text-purple-700 py-2 rounded-lg hover:bg-purple-200 flex justify-between items-center px-3">
+                                <span>🔗 Word Association</span>
+                                <span class="text-sm">20-35 pts</span>
+                            </button>
+                            <button onclick="startGame('prefix-suffix')" class="w-full bg-purple-100 text-purple-700 py-2 rounded-lg hover:bg-purple-200 flex justify-between items-center px-3">
+                                <span>📚 Prefix & Suffix</span>
+                                <span class="text-sm">24-42 pts</span>
+                            </button>
+                            <button onclick="startGame('compound-words')" class="w-full bg-purple-100 text-purple-700 py-2 rounded-lg hover:bg-purple-200 flex justify-between items-center px-3">
+                                <span>🔀 Compound Words</span>
+                                <span class="text-sm">18-32 pts</span>
+                            </button>
+                            <button onclick="startGame('word-definitions')" class="w-full bg-purple-100 text-purple-700 py-2 rounded-lg hover:bg-purple-200 flex justify-between items-center px-3">
+                                <span>📖 Word Definitions</span>
+                                <span class="text-sm">22-38 pts</span>
+                            </button>
+                            <button onclick="startGame('spelling-bee')" class="w-full bg-purple-100 text-purple-700 py-2 rounded-lg hover:bg-purple-200 flex justify-between items-center px-3">
+                                <span>🐝 Spelling Bee</span>
+                                <span class="text-sm">30-60 pts</span>
+                            </button>
+                            <button onclick="startGame('word-chains')" class="w-full bg-purple-100 text-purple-700 py-2 rounded-lg hover:bg-purple-200 flex justify-between items-center px-3">
+                                <span>⛓️ Word Chains</span>
+                                <span class="text-sm">26-48 pts</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Quote & Story Games -->
+                    <div class="bg-white rounded-xl shadow-lg p-6 card-hover">
+                        <div class="text-4xl mb-4">📚</div>
+                        <h3 class="text-xl font-bold mb-2">Quote & Story</h3>
+                        <p class="text-gray-600 mb-4">Literature knowledge</p>
+                        <div class="space-y-2 max-h-64 overflow-y-auto">
+                            <button onclick="startGame('quote-completion')" class="w-full bg-blue-100 text-blue-700 py-2 rounded-lg hover:bg-blue-200 flex justify-between items-center px-3">
+                                <span>💬 Quote Completion</span>
+                                <span class="text-sm">30-55 pts</span>
+                            </button>
+                            <button onclick="startGame('who-said-it')" class="w-full bg-blue-100 text-blue-700 py-2 rounded-lg hover:bg-blue-200 flex justify-between items-center px-3">
+                                <span>🎭 Who Said It?</span>
+                                <span class="text-sm">25-45 pts</span>
+                            </button>
+                            <button onclick="startGame('shakespeare-lines')" class="w-full bg-blue-100 text-blue-700 py-2 rounded-lg hover:bg-blue-200 flex justify-between items-center px-3">
+                                <span>🎪 Shakespeare Lines</span>
+                                <span class="text-sm">35-60 pts</span>
+                            </button>
+                            <button onclick="startGame('character-match')" class="w-full bg-blue-100 text-blue-700 py-2 rounded-lg hover:bg-blue-200 flex justify-between items-center px-3">
+                                <span>👤 Character Match</span>
+                                <span class="text-sm">28-48 pts</span>
+                            </button>
+                            <button onclick="startGame('book-opening-lines')" class="w-full bg-blue-100 text-blue-700 py-2 rounded-lg hover:bg-blue-200 flex justify-between items-center px-3">
+                                <span>📖 Opening Lines</span>
+                                <span class="text-sm">32-52 pts</span>
+                            </button>
+                            <button onclick="startGame('plot-summary')" class="w-full bg-blue-100 text-blue-700 py-2 rounded-lg hover:bg-blue-200 flex justify-between items-center px-3">
+                                <span>📚 Plot Summary</span>
+                                <span class="text-sm">26-46 pts</span>
+                            </button>
+                            <button onclick="startGame('poetry-lines')" class="w-full bg-blue-100 text-blue-700 py-2 rounded-lg hover:bg-blue-200 flex justify-between items-center px-3">
+                                <span>🌹 Poetry Lines</span>
+                                <span class="text-sm">30-50 pts</span>
+                            </button>
+                            <button onclick="startGame('dialogue-detective')" class="w-full bg-blue-100 text-blue-700 py-2 rounded-lg hover:bg-blue-200 flex justify-between items-center px-3">
+                                <span>🕵️ Dialogue Detective</span>
+                                <span class="text-sm">24-44 pts</span>
+                            </button>
+                            <button onclick="startGame('story-endings')" class="w-full bg-blue-100 text-blue-700 py-2 rounded-lg hover:bg-blue-200 flex justify-between items-center px-3">
+                                <span>🎬 Story Endings</span>
+                                <span class="text-sm">28-48 pts</span>
+                            </button>
+                            <button onclick="startGame('famous-speeches')" class="w-full bg-blue-100 text-blue-700 py-2 rounded-lg hover:bg-blue-200 flex justify-between items-center px-3">
+                                <span>🎤 Famous Speeches</span>
+                                <span class="text-sm">35-55 pts</span>
+                            </button>
+                            <button onclick="startGame('book-to-movie')" class="w-full bg-blue-100 text-blue-700 py-2 rounded-lg hover:bg-blue-200 flex justify-between items-center px-3">
+                                <span>🎥 Book to Movie</span>
+                                <span class="text-sm">22-42 pts</span>
+                            </button>
+                            <button onclick="startGame('narrative-voice')" class="w-full bg-blue-100 text-blue-700 py-2 rounded-lg hover:bg-blue-200 flex justify-between items-center px-3">
+                                <span>🗣️ Narrative Voice</span>
+                                <span class="text-sm">26-46 pts</span>
+                            </button>
+                            <button onclick="startGame('literary-themes')" class="w-full bg-blue-100 text-blue-700 py-2 rounded-lg hover:bg-blue-200 flex justify-between items-center px-3">
+                                <span>🎨 Literary Themes</span>
+                                <span class="text-sm">30-50 pts</span>
+                            </button>
+                            <button onclick="startGame('author-style')" class="w-full bg-blue-100 text-blue-700 py-2 rounded-lg hover:bg-blue-200 flex justify-between items-center px-3">
+                                <span>✍️ Author Style</span>
+                                <span class="text-sm">32-52 pts</span>
+                            </button>
+                            <button onclick="startGame('classic-quotes')" class="w-full bg-blue-100 text-blue-700 py-2 rounded-lg hover:bg-blue-200 flex justify-between items-center px-3">
+                                <span>⭐ Classic Quotes</span>
+                                <span class="text-sm">28-48 pts</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Trivia & Quizzes -->
+                    <div class="bg-white rounded-xl shadow-lg p-6 card-hover">
+                        <div class="text-4xl mb-4">🧠</div>
+                        <h3 class="text-xl font-bold mb-2">Trivia & Quizzes</h3>
+                        <p class="text-gray-600 mb-4">Quick knowledge tests</p>
+                        <div class="space-y-2 max-h-64 overflow-y-auto">
+                            <button onclick="startGame('timed-quiz')" class="w-full bg-green-100 text-green-700 py-2 rounded-lg hover:bg-green-200 flex justify-between items-center px-3">
+                                <span>⏰ Timed Quiz</span>
+                                <span class="text-sm">40-70 pts</span>
+                            </button>
+                            <button onclick="startGame('true-false')" class="w-full bg-green-100 text-green-700 py-2 rounded-lg hover:bg-green-200 flex justify-between items-center px-3">
+                                <span>✅ True/False</span>
+                                <span class="text-sm">10-25 pts</span>
+                            </button>
+                            <button onclick="startGame('title-scramble')" class="w-full bg-green-100 text-green-700 py-2 rounded-lg hover:bg-green-200 flex justify-between items-center px-3">
+                                <span>🔀 Title Scramble</span>
+                                <span class="text-sm">20-40 pts</span>
+                            </button>
+                            <button onclick="startGame('multiple-choice')" class="w-full bg-green-100 text-green-700 py-2 rounded-lg hover:bg-green-200 flex justify-between items-center px-3">
+                                <span>🔤 Multiple Choice</span>
+                                <span class="text-sm">15-35 pts</span>
+                            </button>
+                            <button onclick="startGame('lightning-round')" class="w-full bg-green-100 text-green-700 py-2 rounded-lg hover:bg-green-200 flex justify-between items-center px-3">
+                                <span>⚡ Lightning Round</span>
+                                <span class="text-sm">50-80 pts</span>
+                            </button>
+                            <button onclick="startGame('genre-quiz')" class="w-full bg-green-100 text-green-700 py-2 rounded-lg hover:bg-green-200 flex justify-between items-center px-3">
+                                <span>📚 Genre Quiz</span>
+                                <span class="text-sm">25-45 pts</span>
+                            </button>
+                            <button onclick="startGame('author-trivia')" class="w-full bg-green-100 text-green-700 py-2 rounded-lg hover:bg-green-200 flex justify-between items-center px-3">
+                                <span>👨‍💼 Author Trivia</span>
+                                <span class="text-sm">30-50 pts</span>
+                            </button>
+                            <button onclick="startGame('publication-dates')" class="w-full bg-green-100 text-green-700 py-2 rounded-lg hover:bg-green-200 flex justify-between items-center px-3">
+                                <span>📅 Publication Dates</span>
+                                <span class="text-sm">22-42 pts</span>
+                            </button>
+                            <button onclick="startGame('literary-awards')" class="w-full bg-green-100 text-green-700 py-2 rounded-lg hover:bg-green-200 flex justify-between items-center px-3">
+                                <span>🏆 Literary Awards</span>
+                                <span class="text-sm">28-48 pts</span>
+                            </button>
+                            <button onclick="startGame('book-facts')" class="w-full bg-green-100 text-green-700 py-2 rounded-lg hover:bg-green-200 flex justify-between items-center px-3">
+                                <span>💡 Book Facts</span>
+                                <span class="text-sm">18-38 pts</span>
+                            </button>
+                            <button onclick="startGame('literary-movements')" class="w-full bg-green-100 text-green-700 py-2 rounded-lg hover:bg-green-200 flex justify-between items-center px-3">
+                                <span>🎭 Literary Movements</span>
+                                <span class="text-sm">35-55 pts</span>
+                            </button>
+                            <button onclick="startGame('word-origins')" class="w-full bg-green-100 text-green-700 py-2 rounded-lg hover:bg-green-200 flex justify-between items-center px-3">
+                                <span>🌍 Word Origins</span>
+                                <span class="text-sm">26-46 pts</span>
+                            </button>
+                            <button onclick="startGame('reading-comprehension')" class="w-full bg-green-100 text-green-700 py-2 rounded-lg hover:bg-green-200 flex justify-between items-center px-3">
+                                <span>📖 Reading Comprehension</span>
+                                <span class="text-sm">32-52 pts</span>
+                            </button>
+                            <button onclick="startGame('literary-devices')" class="w-full bg-green-100 text-green-700 py-2 rounded-lg hover:bg-green-200 flex justify-between items-center px-3">
+                                <span>🔧 Literary Devices</span>
+                                <span class="text-sm">24-44 pts</span>
+                            </button>
+                            <button onclick="startGame('speed-reading')" class="w-full bg-green-100 text-green-700 py-2 rounded-lg hover:bg-green-200 flex justify-between items-center px-3">
+                                <span>🏃 Speed Reading</span>
+                                <span class="text-sm">45-75 pts</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Challenges & Tournaments -->
+                    <div class="bg-white rounded-xl shadow-lg p-6 card-hover">
+                        <div class="text-4xl mb-4">⚔️</div>
+                        <h3 class="text-xl font-bold mb-2">Tournaments</h3>
+                        <p class="text-gray-600 mb-4">Premium challenges</p>
+                        <div class="space-y-2 max-h-64 overflow-y-auto">
+                            <button onclick="showTournament('battle-mode')" class="w-full bg-red-100 text-red-700 py-2 rounded-lg hover:bg-red-200 flex justify-between items-center px-3">
+                                <span>⚔️ Battle Mode</span>
+                                <span class="text-sm">🔒 50 pts</span>
+                            </button>
+                            <button onclick="showTournament('team-play')" class="w-full bg-red-100 text-red-700 py-2 rounded-lg hover:bg-red-200 flex justify-between items-center px-3">
+                                <span>👥 Team Play</span>
+                                <span class="text-sm">🔒 75 pts</span>
+                            </button>
+                            <button onclick="showTournament('championship')" class="w-full bg-red-100 text-red-700 py-2 rounded-lg hover:bg-red-200 flex justify-between items-center px-3">
+                                <span>🏆 Championship</span>
+                                <span class="text-sm">🔒 100 pts</span>
+                            </button>
+                            <button onclick="showTournament('speed-challenge')" class="w-full bg-red-100 text-red-700 py-2 rounded-lg hover:bg-red-200 flex justify-between items-center px-3">
+                                <span>🏃 Speed Challenge</span>
+                                <span class="text-sm">🔒 60 pts</span>
+                            </button>
+                            <button onclick="showTournament('survival-mode')" class="w-full bg-red-100 text-red-700 py-2 rounded-lg hover:bg-red-200 flex justify-between items-center px-3">
+                                <span>💀 Survival Mode</span>
+                                <span class="text-sm">🔒 80 pts</span>
+                            </button>
+                            <button onclick="showTournament('weekly-tournament')" class="w-full bg-red-100 text-red-700 py-2 rounded-lg hover:bg-red-200 flex justify-between items-center px-3">
+                                <span>📅 Weekly Tournament</span>
+                                <span class="text-sm">🔒 40 pts</span>
+                            </button>
+                            <button onclick="showTournament('masters-league')" class="w-full bg-red-100 text-red-700 py-2 rounded-lg hover:bg-red-200 flex justify-between items-center px-3">
+                                <span>🎓 Masters League</span>
+                                <span class="text-sm">🔒 120 pts</span>
+                            </button>
+                            <button onclick="showTournament('streak-challenge')" class="w-full bg-red-100 text-red-700 py-2 rounded-lg hover:bg-red-200 flex justify-between items-center px-3">
+                                <span>🔥 Streak Challenge</span>
+                                <span class="text-sm">🔒 30 pts</span>
+                            </button>
+                            <button onclick="showTournament('elimination-round')" class="w-full bg-red-100 text-red-700 py-2 rounded-lg hover:bg-red-200 flex justify-between items-center px-3">
+                                <span>❌ Elimination Round</span>
+                                <span class="text-sm">🔒 90 pts</span>
+                            </button>
+                            <button onclick="showTournament('boss-battle')" class="w-full bg-red-100 text-red-700 py-2 rounded-lg hover:bg-red-200 flex justify-between items-center px-3">
+                                <span>👹 Boss Battle</span>
+                                <span class="text-sm">🔒 150 pts</span>
+                            </button>
+                            <button onclick="showTournament('guild-wars')" class="w-full bg-red-100 text-red-700 py-2 rounded-lg hover:bg-red-200 flex justify-between items-center px-3">
+                                <span>🏰 Guild Wars</span>
+                                <span class="text-sm">🔒 200 pts</span>
+                            </button>
+                            <button onclick="showTournament('daily-duel')" class="w-full bg-red-100 text-red-700 py-2 rounded-lg hover:bg-red-200 flex justify-between items-center px-3">
+                                <span>🗡️ Daily Duel</span>
+                                <span class="text-sm">🔒 25 pts</span>
+                            </button>
+                            <button onclick="showTournament('legend-quest')" class="w-full bg-red-100 text-red-700 py-2 rounded-lg hover:bg-red-200 flex justify-between items-center px-3">
+                                <span>🌟 Legend Quest</span>
+                                <span class="text-sm">🔒 300 pts</span>
+                            </button>
+                            <button onclick="showTournament('blitz-tournament')" class="w-full bg-red-100 text-red-700 py-2 rounded-lg hover:bg-red-200 flex justify-between items-center px-3">
+                                <span>⚡ Blitz Tournament</span>
+                                <span class="text-sm">🔒 45 pts</span>
+                            </button>
+                            <button onclick="showTournament('grand-finale')" class="w-full bg-red-100 text-red-700 py-2 rounded-lg hover:bg-red-200 flex justify-between items-center px-3">
+                                <span>🎊 Grand Finale</span>
+                                <span class="text-sm">🔒 500 pts</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Game Play Page -->
+    <div id="game-play" class="page hidden">
+        <div class="min-h-screen pt-16 bg-gray-50">
+            <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                <div class="bg-white rounded-xl shadow-lg p-8">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-2xl font-bold" id="game-title">Classic Crossword</h2>
+                        <div class="flex items-center space-x-4">
+                            <div class="text-lg font-semibold text-purple-600">⏱️ <span id="timer">5:00</span></div>
+                            <div class="text-lg font-semibold text-green-600">🎯 <span id="game-points">0</span> pts</div>
+                            <button onclick="showHint()" class="bg-yellow-500 text-white px-3 py-1 rounded text-sm hover:bg-yellow-600">💡 Hint</button>
+                        </div>
+                    </div>
+                    
+                    <!-- Crossword Game -->
+                    <div id="crossword-game" class="game-content">
+                        <div class="grid md:grid-cols-2 gap-8">
+                            <!-- Crossword Grid -->
+                            <div class="flex flex-col items-center">
+                                <h3 class="text-lg font-semibold mb-4">Literature Crossword Puzzle</h3>
+                                <div id="crossword-grid" class="grid grid-cols-7 gap-1 mb-4">
+                                    <!-- Grid will be generated by JavaScript -->
+                                </div>
+                                <div class="flex space-x-4">
+                                    <button onclick="checkCrossword()" class="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700">Check Answers</button>
+                                    <button onclick="clearCrossword()" class="bg-gray-600 text-white px-6 py-2 rounded-lg hover:bg-gray-700">Clear</button>
+                                </div>
+                            </div>
+                            
+                            <!-- Clues -->
+                            <div>
+                                <div class="mb-6">
+                                    <h4 class="text-lg font-semibold mb-3">📍 Across</h4>
+                                    <div class="space-y-2 text-sm">
+                                        <div><strong>1.</strong> Shakespeare's tragic prince (6)</div>
+                                        <div><strong>4.</strong> Author of "1984" (6)</div>
+                                        <div><strong>6.</strong> "To be or not to be" play (6)</div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <h4 class="text-lg font-semibold mb-3">📍 Down</h4>
+                                    <div class="space-y-2 text-sm">
+                                        <div><strong>1.</strong> Epic poem by Homer (5)</div>
+                                        <div><strong>2.</strong> Jane Austen heroine (4)</div>
+                                        <div><strong>3.</strong> Dickens' orphan (6)</div>
+                                        <div><strong>5.</strong> Poet of "The Raven" (3)</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Word Search Game -->
+                    <div id="wordsearch-game" class="game-content hidden">
+                        <div class="text-center">
+                            <h3 class="text-xl font-semibold mb-4">Literature Word Search</h3>
+                            <p class="text-gray-600 mb-6">Find these literature terms in the grid:</p>
+                            
+                            <div class="flex flex-wrap justify-center gap-2 mb-6">
+                                <span class="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-sm" id="word-NOVEL">NOVEL</span>
+                                <span class="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-sm" id="word-POEM">POEM</span>
+                                <span class="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-sm" id="word-DRAMA">DRAMA</span>
+                                <span class="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-sm" id="word-PROSE">PROSE</span>
+                                <span class="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-sm" id="word-VERSE">VERSE</span>
+                            </div>
+                            
+                            <div id="wordsearch-grid" class="grid grid-cols-10 gap-1 max-w-lg mx-auto mb-6">
+                                <!-- Grid will be generated by JavaScript -->
+                            </div>
+                            
+                            <div class="flex justify-center space-x-4">
+                                <button onclick="checkWordSearch()" class="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700">Check Words</button>
+                                <button onclick="clearWordSearch()" class="bg-gray-600 text-white px-6 py-2 rounded-lg hover:bg-gray-700">Clear Selection</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Anagram Game -->
+                    <div id="anagram-game" class="game-content hidden">
+                        <div class="text-center">
+                            <h3 class="text-xl font-semibold mb-4">Author Anagrams</h3>
+                            <p class="text-gray-600 mb-6">Unscramble these letters to reveal famous authors:</p>
+                            
+                            <div class="space-y-6 max-w-md mx-auto">
+                                <div class="anagram-question">
+                                    <div class="text-lg font-semibold mb-2">1. KRAM NIAWT</div>
+                                    <input type="text" class="anagram-input w-full p-3 border rounded-lg text-center" placeholder="Enter author name" data-answer="MARK TWAIN">
+                                </div>
+                                <div class="anagram-question">
+                                    <div class="text-lg font-semibold mb-2">2. SENAJ NETASU</div>
+                                    <input type="text" class="anagram-input w-full p-3 border rounded-lg text-center" placeholder="Enter author name" data-answer="JANE AUSTEN">
+                                </div>
+                                <div class="anagram-question">
+                                    <div class="text-lg font-semibold mb-2">3. SEMAKLIPERE</div>
+                                    <input type="text" class="anagram-input w-full p-3 border rounded-lg text-center" placeholder="Enter author name" data-answer="SHAKESPEARE">
+                                </div>
+                            </div>
+                            
+                            <div class="flex justify-center space-x-4 mt-8">
+                                <button onclick="checkAnagrams()" class="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700">Check Answers</button>
+                                <button onclick="clearAnagrams()" class="bg-gray-600 text-white px-6 py-2 rounded-lg hover:bg-gray-700">Clear All</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Quiz Game -->
+                    <div id="quiz-game" class="game-content hidden">
+                        <div class="max-w-2xl mx-auto">
+                            <div class="mb-6">
+                                <div class="flex justify-between items-center mb-4">
+                                    <h3 class="text-xl font-semibold">Literature Quiz</h3>
+                                    <span class="text-sm text-gray-600">Question <span id="current-question">1</span> of 5</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-2">
+                                    <div id="quiz-progress" class="bg-purple-600 h-2 rounded-full" style="width: 20%"></div>
+                                </div>
+                            </div>
+                            
+                            <div id="quiz-question-container">
+                                <div class="quiz-question active">
+                                    <h4 class="text-lg font-semibold mb-4">Who wrote "Pride and Prejudice"?</h4>
+                                    <div class="space-y-3">
+                                        <button class="quiz-option w-full p-3 text-left border rounded-lg hover:bg-purple-50" data-answer="correct">A) Jane Austen</button>
+                                        <button class="quiz-option w-full p-3 text-left border rounded-lg hover:bg-purple-50" data-answer="wrong">B) Charlotte Brontë</button>
+                                        <button class="quiz-option w-full p-3 text-left border rounded-lg hover:bg-purple-50" data-answer="wrong">C) Emily Dickinson</button>
+                                        <button class="quiz-option w-full p-3 text-left border rounded-lg hover:bg-purple-50" data-answer="wrong">D) Virginia Woolf</button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="flex justify-center mt-8">
+                                <button id="next-question-btn" onclick="nextQuestion()" class="bg-purple-600 text-white px-6 py-2 rounded-lg hover:bg-purple-700 hidden">Next Question</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Back Button -->
+                    <div class="text-center mt-8">
+                        <button onclick="showPage('games')" class="bg-gray-600 text-white px-6 py-2 rounded-lg hover:bg-gray-700">← Back to Games</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Wallet Page -->
+    <div id="wallet-page" class="page hidden">
+        <div class="min-h-screen pt-16 bg-gray-50">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                <h2 class="text-3xl font-bold mb-8">Your Wallet</h2>
+                
+                <!-- Balance Cards -->
+                <div class="grid md:grid-cols-3 gap-6 mb-8">
+                    <div class="bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-xl p-6">
+                        <div class="text-2xl mb-2">💎</div>
+                        <div class="text-sm opacity-90">Total Points</div>
+                        <div class="text-3xl font-bold">1,250</div>
+                    </div>
+                    <div class="bg-gradient-to-r from-green-500 to-blue-500 text-white rounded-xl p-6">
+                        <div class="text-2xl mb-2">💵</div>
+                        <div class="text-sm opacity-90">USD Balance</div>
+                        <div class="text-3xl font-bold">$10.00</div>
+                    </div>
+                    <div class="bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-xl p-6">
+                        <div class="text-2xl mb-2">🏦</div>
+                        <div class="text-sm opacity-90">KSH Balance</div>
+                        <div class="text-3xl font-bold">1,300</div>
+                    </div>
+                </div>
+
+                <!-- Actions -->
+                <div class="grid md:grid-cols-2 gap-6">
+                    <!-- Withdraw -->
+                    <div class="bg-white rounded-xl shadow-lg p-6">
+                        <h3 class="text-xl font-bold mb-4">💸 Withdraw Funds</h3>
+                        <p class="text-gray-600 mb-4">Minimum withdrawal: $5.00</p>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium mb-2">Withdrawal Method</label>
+                                <select class="w-full p-2 border rounded-lg">
+                                    <option>M-Pesa (Kenya)</option>
+                                    <option>PayPal</option>
+                                    <option>Bank Transfer</option>
+                                    <option>Crypto Wallet</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium mb-2">Amount (USD)</label>
+                                <input type="number" min="5" step="0.01" class="w-full p-2 border rounded-lg" placeholder="5.00">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium mb-2">Account Details</label>
+                                <input type="text" class="w-full p-2 border rounded-lg" placeholder="Phone number or account info">
+                            </div>
+                            <button onclick="processWithdrawal()" class="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700">Request Withdrawal</button>
+                        </div>
+                    </div>
+
+                    <!-- Deposit -->
+                    <div class="bg-white rounded-xl shadow-lg p-6">
+                        <h3 class="text-xl font-bold mb-4">💰 Deposit Funds</h3>
+                        <p class="text-gray-600 mb-4">Buy extra lives, hints, or premium access</p>
+                        <div class="bg-blue-50 p-4 rounded-lg mb-4">
+                            <div class="font-semibold">Paybill Details:</div>
+                            <div>Paybill: <span class="font-mono">522522</span></div>
+                            <div>Account: <span class="font-mono">1337586218</span></div>
+                        </div>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium mb-2">Deposit Type</label>
+                                <select class="w-full p-2 border rounded-lg">
+                                    <option>Extra Lives (10 KSH)</option>
+                                    <option>Hints Pack (25 KSH)</option>
+                                    <option>Premium Access (100 KSH)</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium mb-2">Amount (KSH)</label>
+                                <input type="number" min="10" class="w-full p-2 border rounded-lg" placeholder="100">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium mb-2">Transaction Message</label>
+                                <input type="text" class="w-full p-2 border rounded-lg" placeholder="Paste M-Pesa message here">
+                            </div>
+                            <button onclick="processDeposit()" class="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700">Submit Deposit</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Referral Page -->
+    <div id="referral-page" class="page hidden">
+        <div class="min-h-screen pt-16 bg-gray-50">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                <h2 class="text-3xl font-bold mb-8">Referral Program</h2>
+                
+                <div class="bg-white rounded-xl shadow-lg p-6 mb-8">
+                    <h3 class="text-xl font-bold mb-4">Your Referral Link</h3>
+                    <div class="flex items-center space-x-4">
+                        <input type="text" value="https://wordquest.com/refer/Player123" readonly class="flex-1 p-3 bg-gray-100 border rounded-lg font-mono text-sm">
+                        <button onclick="copyReferralLink()" class="bg-purple-600 text-white px-4 py-3 rounded-lg hover:bg-purple-700">Copy Link</button>
+                    </div>
+                    <p class="text-gray-600 mt-4">Share this link and earn 50 points for each friend who joins!</p>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="bg-white rounded-xl shadow-lg p-6">
+                        <h3 class="text-xl font-bold mb-4">Referral Stats</h3>
+                        <div class="space-y-4">
+                            <div class="flex justify-between">
+                                <span>Total Referrals:</span>
+                                <span class="font-bold text-purple-600">12</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>Points Earned:</span>
+                                <span class="font-bold text-green-600">600</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>This Month:</span>
+                                <span class="font-bold text-blue-600">3</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-xl shadow-lg p-6">
+                        <h3 class="text-xl font-bold mb-4">Top Referrers</h3>
+                        <div class="space-y-3">
+                            <div class="flex justify-between items-center">
+                                <div class="flex items-center space-x-2">
+                                    <div class="w-6 h-6 bg-yellow-400 rounded-full flex items-center justify-center text-xs">1</div>
+                                    <span>BookLover99</span>
+                                </div>
+                                <span class="text-sm text-gray-600">45 referrals</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <div class="flex items-center space-x-2">
+                                    <div class="w-6 h-6 bg-gray-400 rounded-full flex items-center justify-center text-xs">2</div>
+                                    <span>WordMaster</span>
+                                </div>
+                                <span class="text-sm text-gray-600">38 referrals</span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <div class="flex items-center space-x-2">
+                                    <div class="w-6 h-6 bg-orange-400 rounded-full flex items-center justify-center text-xs">3</div>
+                                    <span>LitGenius</span>
+                                </div>
+                                <span class="text-sm text-gray-600">32 referrals</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Leaderboard Page -->
+    <div id="leaderboard-page" class="page hidden">
+        <div class="min-h-screen pt-16 bg-gray-50">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                <h2 class="text-3xl font-bold mb-8">🏆 Leaderboard</h2>
+                
+                <div class="bg-white rounded-xl shadow-lg p-6">
+                    <div class="flex space-x-4 mb-6">
+                        <button onclick="showLeaderboard('daily')" class="px-4 py-2 bg-purple-600 text-white rounded-lg">Daily</button>
+                        <button onclick="showLeaderboard('weekly')" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300">Weekly</button>
+                        <button onclick="showLeaderboard('monthly')" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300">Monthly</button>
+                    </div>
+                    
+                    <div class="space-y-4">
+                        <!-- Top 3 -->
+                        <div class="flex items-center justify-between p-4 bg-gradient-to-r from-yellow-400 to-orange-400 text-white rounded-lg">
+                            <div class="flex items-center space-x-4">
+                                <div class="text-2xl">👑</div>
+                                <div>
+                                    <div class="font-bold">ShakespeareFan</div>
+                                    <div class="text-sm opacity-90">Professor Level</div>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <div class="font-bold">2,450 pts</div>
+                                <div class="text-sm opacity-90">Today</div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center justify-between p-4 bg-gradient-to-r from-gray-300 to-gray-400 text-white rounded-lg">
+                            <div class="flex items-center space-x-4">
+                                <div class="text-2xl">🥈</div>
+                                <div>
+                                    <div class="font-bold">BookWorm2024</div>
+                                    <div class="text-sm opacity-90">Master Level</div>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <div class="font-bold">2,180 pts</div>
+                                <div class="text-sm opacity-90">Today</div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center justify-between p-4 bg-gradient-to-r from-orange-400 to-red-400 text-white rounded-lg">
+                            <div class="flex items-center space-x-4">
+                                <div class="text-2xl">🥉</div>
+                                <div>
+                                    <div class="font-bold">LiteratureLover</div>
+                                    <div class="text-sm opacity-90">Scholar Level</div>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <div class="font-bold">1,950 pts</div>
+                                <div class="text-sm opacity-90">Today</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Other players -->
+                        <div class="space-y-2">
+                            <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center text-sm font-bold">4</div>
+                                    <span>Player123 (You)</span>
+                                </div>
+                                <span class="font-semibold text-purple-600">1,250 pts</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tournament Modal -->
+    <div id="tournament-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
+        <div class="bg-white rounded-xl p-8 max-w-md w-full mx-4">
+            <h3 class="text-2xl font-bold mb-4">🏆 Tournament Entry</h3>
+            <div class="mb-6">
+                <div class="flex justify-between mb-2">
+                    <span>Entry Fee:</span>
+                    <span class="font-bold text-red-600">50 points</span>
+                </div>
+                <div class="flex justify-between mb-2">
+                    <span>Potential Reward:</span>
+                    <span class="font-bold text-green-600">500 points</span>
+                </div>
+                <div class="flex justify-between">
+                    <span>Your Balance:</span>
+                    <span class="font-bold">1,250 points</span>
+                </div>
+            </div>
+            <div class="flex space-x-4">
+                <button onclick="enterTournament()" class="flex-1 bg-purple-600 text-white py-2 rounded-lg hover:bg-purple-700">Enter Tournament</button>
+                <button onclick="closeTournamentModal()" class="flex-1 bg-gray-300 text-gray-700 py-2 rounded-lg hover:bg-gray-400">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Withdrawal Support Modal -->
+    <div id="withdrawal-support-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
+        <div class="bg-white rounded-xl p-8 max-w-md w-full mx-4">
+            <h3 class="text-2xl font-bold mb-4">💎 Upgrade to VIP</h3>
+            <p class="text-gray-600 mb-6">To enable unlimited withdrawals, please support our platform with a one-time fee of $1.70 (KSH 221).</p>
+            <div class="bg-blue-50 p-4 rounded-lg mb-6">
+                <div class="font-semibold">Payment Details:</div>
+                <div>Paybill: <span class="font-mono">522522</span></div>
+                <div>Account: <span class="font-mono">1337586218</span></div>
+                <div>Amount: <span class="font-mono">KSH 221</span></div>
+            </div>
+            <div class="mb-4">
+                <label class="block text-sm font-medium mb-2">Paste M-Pesa Message</label>
+                <textarea class="w-full p-2 border rounded-lg" rows="3" placeholder="Paste your M-Pesa confirmation message here"></textarea>
+            </div>
+            <div class="flex space-x-4">
+                <button onclick="confirmVIPUpgrade()" class="flex-1 bg-green-600 text-white py-2 rounded-lg hover:bg-green-700">Confirm Payment</button>
+                <button onclick="closeWithdrawalModal()" class="flex-1 bg-gray-300 text-gray-700 py-2 rounded-lg hover:bg-gray-400">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Game Completion Modal -->
+    <div id="game-completion-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
+        <div class="bg-white rounded-xl p-8 max-w-md w-full mx-4 text-center">
+            <div class="text-6xl mb-4">🎉</div>
+            <h3 class="text-2xl font-bold mb-4">Congratulations!</h3>
+            <p class="text-gray-600 mb-6">You scored <span class="font-bold text-purple-600">45 points</span> in this game!</p>
+            <div class="flex space-x-4">
+                <button onclick="playAgain()" class="flex-1 bg-purple-600 text-white py-2 rounded-lg hover:bg-purple-700">Play Again</button>
+                <button onclick="backToDashboard()" class="flex-1 bg-gray-300 text-gray-700 py-2 rounded-lg hover:bg-gray-400">Dashboard</button>
+            </div>
+            <button onclick="shareGame()" class="w-full mt-4 bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700">Share & Earn Bonus</button>
+        </div>
+    </div>
+
+    <script>
+        // Global state
+        let currentUser = {
+            username: 'Player123',
+            points: 1250,
+            usd: 10.00,
+            ksh: 1300,
+            status: 'Premium',
+            level: 'Scholar',
+            isLoggedIn: false
+        };
+
+        let pageHistory = ['welcome'];
+
+        // Mobile menu functions
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            const hamburgerBtn = document.getElementById('hamburger-btn');
+            const line1 = document.getElementById('line1');
+            const line2 = document.getElementById('line2');
+            const line3 = document.getElementById('line3');
+            
+            mobileMenu.classList.toggle('hidden');
+            
+            // Animate hamburger to X
+            if (mobileMenu.classList.contains('hidden')) {
+                line1.style.transform = 'rotate(0deg) translateY(0px)';
+                line2.style.opacity = '1';
+                line3.style.transform = 'rotate(0deg) translateY(0px)';
+            } else {
+                line1.style.transform = 'rotate(45deg) translateY(6px)';
+                line2.style.opacity = '0';
+                line3.style.transform = 'rotate(-45deg) translateY(-6px)';
+            }
+        }
+
+        function updateNavigation() {
+            const desktopMenu = document.getElementById('desktop-menu');
+            const userMenuItems = document.getElementById('user-menu-items');
+            
+            if (currentUser.isLoggedIn) {
+                desktopMenu.innerHTML = `
+                    <button onclick="showPage('dashboard')" class="text-gray-700 hover:text-purple-600 px-3 py-2 rounded-md transition-colors">Dashboard</button>
+                    <button onclick="showPage('games')" class="text-gray-700 hover:text-purple-600 px-3 py-2 rounded-md transition-colors">Games</button>
+                    <button onclick="showPage('wallet')" class="text-gray-700 hover:text-purple-600 px-3 py-2 rounded-md transition-colors">Wallet</button>
+                    <button onclick="logout()" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition-colors">Logout</button>
+                `;
+                userMenuItems.style.display = 'block';
+            } else {
+                desktopMenu.innerHTML = `
+                    <button onclick="showPage('login')" class="text-gray-700 hover:text-purple-600 px-3 py-2 rounded-md transition-colors">Log In</button>
+                    <button onclick="showPage('signup')" class="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700 transition-colors">Sign Up</button>
+                `;
+                userMenuItems.style.display = 'none';
+            }
+        }
+
+        // Page navigation
+        function showPage(pageId) {
+            // Close mobile menu if open
+            document.getElementById('mobile-menu').classList.add('hidden');
+            const line1 = document.getElementById('line1');
+            const line2 = document.getElementById('line2');
+            const line3 = document.getElementById('line3');
+            line1.style.transform = 'rotate(0deg) translateY(0px)';
+            line2.style.opacity = '1';
+            line3.style.transform = 'rotate(0deg) translateY(0px)';
+            
+            // Add to history if it's a new page
+            const currentPage = pageHistory[pageHistory.length - 1];
+            if (currentPage !== pageId) {
+                pageHistory.push(pageId);
+            }
+            
+            document.querySelectorAll('.page').forEach(page => page.classList.add('hidden'));
+            document.getElementById(pageId + '-page').classList.remove('hidden');
+            
+            if (pageId === 'dashboard') {
+                updateDashboard();
+            }
+        }
+
+        function goBack() {
+            if (pageHistory.length > 1) {
+                pageHistory.pop(); // Remove current page
+                const previousPage = pageHistory[pageHistory.length - 1];
+                showPage(previousPage);
+                pageHistory.pop(); // Remove the duplicate that showPage adds
+            } else {
+                showPage('homepage');
+            }
+        }
+
+        function logout() {
+            currentUser.isLoggedIn = false;
+            pageHistory = ['welcome'];
+            updateNavigation();
+            showPage('welcome');
+            alert('You have been logged out successfully!');
+        }
+
+        // Authentication
+        function handleSignup(event) {
+            event.preventDefault();
+            currentUser.isLoggedIn = true;
+            updateNavigation();
+            alert('Account created successfully! Welcome to WordQuest!');
+            showPage('dashboard');
+        }
+
+        function handleLogin(event) {
+            event.preventDefault();
+            currentUser.isLoggedIn = true;
+            updateNavigation();
+            alert('Welcome back to WordQuest!');
+            showPage('dashboard');
+        }
+
+        // Dashboard updates
+        function updateDashboard() {
+            document.getElementById('username').textContent = currentUser.username;
+            document.getElementById('user-points').textContent = currentUser.points.toLocaleString();
+            document.getElementById('user-usd').textContent = '$' + currentUser.usd.toFixed(2);
+            document.getElementById('user-ksh').textContent = currentUser.ksh.toLocaleString();
+            document.getElementById('user-status').textContent = currentUser.status;
+            document.getElementById('user-avatar').textContent = currentUser.username.charAt(0);
+        }
+
+        // Game state
+        let currentGameType = '';
+        let gameTimer = null;
+        let currentQuizQuestion = 0;
+        let quizScore = 0;
+        let selectedCells = [];
+        let foundWords = [];
+
+        // Game functions
+        function startGame(gameType) {
+            currentGameType = gameType;
+            document.getElementById('game-title').textContent = gameType.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase());
+            
+            // Hide all game content
+            document.querySelectorAll('.game-content').forEach(content => content.classList.add('hidden'));
+            
+            // Show specific game based on type
+            if (gameType.includes('crossword')) {
+                document.getElementById('crossword-game').classList.remove('hidden');
+                initializeCrossword();
+            } else if (gameType.includes('wordsearch')) {
+                document.getElementById('wordsearch-game').classList.remove('hidden');
+                initializeWordSearch();
+            } else if (gameType.includes('anagram')) {
+                document.getElementById('anagram-game').classList.remove('hidden');
+            } else if (gameType.includes('quiz') || gameType.includes('trivia')) {
+                document.getElementById('quiz-game').classList.remove('hidden');
+                initializeQuiz();
+            } else {
+                // Default to crossword for other word games
+                document.getElementById('crossword-game').classList.remove('hidden');
+                initializeCrossword();
+            }
+            
+            showPage('game-play');
+            startTimer();
+        }
+
+        function startTimer() {
+            let timeLeft = 300; // 5 minutes
+            if (gameTimer) clearInterval(gameTimer);
+            
+            gameTimer = setInterval(() => {
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+                document.getElementById('timer').textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+                timeLeft--;
+                
+                if (timeLeft < 0) {
+                    clearInterval(gameTimer);
+                    completeGame();
+                }
+            }, 1000);
+        }
+
+        // Crossword functions
+        function initializeCrossword() {
+            const grid = document.getElementById('crossword-grid');
+            grid.innerHTML = '';
+            
+            // Create 7x7 crossword grid
+            const crosswordData = [
+                ['H', 'A', 'M', 'L', 'E', 'T', ''],
+                ['O', '', '', '', '', '', ''],
+                ['M', '', 'O', 'R', 'W', 'E', 'L'],
+                ['E', '', '', '', '', '', 'L'],
+                ['R', '', '', '', '', '', ''],
+                ['', '', '', '', '', '', ''],
+                ['', '', 'H', 'A', 'M', 'L', 'E', 'T']
+            ];
+            
+            for (let i = 0; i < 7; i++) {
+                for (let j = 0; j < 7; j++) {
+                    const cell = document.createElement('div');
+                    cell.className = 'w-8 h-8 border border-gray-300 flex items-center justify-center';
+                    
+                    if (crosswordData[i] && crosswordData[i][j] !== '') {
+                        cell.className += ' bg-white';
+                        const input = document.createElement('input');
+                        input.type = 'text';
+                        input.maxLength = 1;
+                        input.className = 'w-full h-full text-center border-none outline-none text-sm font-bold uppercase';
+                        input.dataset.answer = crosswordData[i][j];
+                        cell.appendChild(input);
+                    } else {
+                        cell.className += ' bg-gray-800';
+                    }
+                    
+                    grid.appendChild(cell);
+                }
+            }
+        }
+
+        function checkCrossword() {
+            const inputs = document.querySelectorAll('#crossword-grid input');
+            let correct = 0;
+            let total = inputs.length;
+            
+            inputs.forEach(input => {
+                if (input.value.toUpperCase() === input.dataset.answer) {
+                    input.style.backgroundColor = '#dcfce7'; // green
+                    correct++;
+                } else if (input.value) {
+                    input.style.backgroundColor = '#fecaca'; // red
+                }
+            });
+            
+            const score = Math.floor((correct / total) * 50);
+            document.getElementById('game-points').textContent = score;
+            
+            if (correct === total) {
+                setTimeout(() => completeGame(score), 1000);
+            }
+        }
+
+        function clearCrossword() {
+            const inputs = document.querySelectorAll('#crossword-grid input');
+            inputs.forEach(input => {
+                input.value = '';
+                input.style.backgroundColor = '';
+            });
+            document.getElementById('game-points').textContent = '0';
+        }
+
+        // Word Search functions
+        function initializeWordSearch() {
+            const grid = document.getElementById('wordsearch-grid');
+            grid.innerHTML = '';
+            selectedCells = [];
+            foundWords = [];
+            
+            // Sample word search grid with hidden words
+            const gridData = [
+                ['N', 'O', 'V', 'E', 'L', 'X', 'Y', 'Z', 'A', 'B'],
+                ['P', 'R', 'A', 'M', 'A', 'R', 'D', 'Q', 'W', 'E'],
+                ['O', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', 'R'],
+                ['E', 'E', 'Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'T'],
+                ['M', 'R', 'A', 'S', 'D', 'F', 'G', 'H', 'J', 'Y'],
+                ['Q', 'V', 'B', 'N', 'M', 'Q', 'W', 'E', 'R', 'U'],
+                ['A', 'E', 'Z', 'X', 'C', 'V', 'B', 'N', 'M', 'I'],
+                ['S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', 'Q', 'O'],
+                ['P', 'R', 'O', 'S', 'E', 'W', 'E', 'R', 'T', 'P'],
+                ['Z', 'X', 'C', 'V', 'B', 'N', 'M', 'Q', 'W', 'E']
+            ];
+            
+            for (let i = 0; i < 10; i++) {
+                for (let j = 0; j < 10; j++) {
+                    const cell = document.createElement('div');
+                    cell.className = 'w-8 h-8 bg-gray-100 border border-gray-300 flex items-center justify-center font-mono text-sm cursor-pointer hover:bg-purple-100';
+                    cell.textContent = gridData[i][j];
+                    cell.dataset.row = i;
+                    cell.dataset.col = j;
+                    cell.onclick = () => selectWordSearchCell(cell);
+                    grid.appendChild(cell);
+                }
+            }
+        }
+
+        function selectWordSearchCell(cell) {
+            cell.classList.toggle('bg-purple-200');
+            const cellId = `${cell.dataset.row}-${cell.dataset.col}`;
+            
+            if (selectedCells.includes(cellId)) {
+                selectedCells = selectedCells.filter(id => id !== cellId);
+            } else {
+                selectedCells.push(cellId);
+            }
+        }
+
+        function checkWordSearch() {
+            // Simple check - if user selected cells, mark some words as found
+            if (selectedCells.length >= 4) {
+                const words = ['NOVEL', 'POEM', 'DRAMA', 'PROSE', 'VERSE'];
+                const foundCount = Math.min(Math.floor(selectedCells.length / 4), words.length);
+                
+                for (let i = 0; i < foundCount; i++) {
+                    const wordElement = document.getElementById(`word-${words[i]}`);
+                    wordElement.className = 'px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm line-through';
+                    if (!foundWords.includes(words[i])) {
+                        foundWords.push(words[i]);
+                    }
+                }
+                
+                const score = foundWords.length * 10;
+                document.getElementById('game-points').textContent = score;
+                
+                if (foundWords.length === words.length) {
+                    setTimeout(() => completeGame(score), 1000);
+                }
+            }
+        }
+
+        function clearWordSearch() {
+            selectedCells = [];
+            document.querySelectorAll('#wordsearch-grid div').forEach(cell => {
+                cell.className = 'w-8 h-8 bg-gray-100 border border-gray-300 flex items-center justify-center font-mono text-sm cursor-pointer hover:bg-purple-100';
+            });
+        }
+
+        // Anagram functions
+        function checkAnagrams() {
+            const inputs = document.querySelectorAll('.anagram-input');
+            let correct = 0;
+            
+            inputs.forEach(input => {
+                const answer = input.dataset.answer.toLowerCase();
+                const userAnswer = input.value.toLowerCase().trim();
+                
+                if (userAnswer === answer) {
+                    input.style.backgroundColor = '#dcfce7';
+                    input.style.borderColor = '#16a34a';
+                    correct++;
+                } else if (userAnswer) {
+                    input.style.backgroundColor = '#fecaca';
+                    input.style.borderColor = '#dc2626';
+                }
+            });
+            
+            const score = correct * 15;
+            document.getElementById('game-points').textContent = score;
+            
+            if (correct === inputs.length) {
+                setTimeout(() => completeGame(score), 1000);
+            }
+        }
+
+        function clearAnagrams() {
+            document.querySelectorAll('.anagram-input').forEach(input => {
+                input.value = '';
+                input.style.backgroundColor = '';
+                input.style.borderColor = '';
+            });
+            document.getElementById('game-points').textContent = '0';
+        }
+
+        // Quiz functions
+        const quizQuestions = [
+            {
+                question: "Who wrote 'Pride and Prejudice'?",
+                options: ["Jane Austen", "Charlotte Brontë", "Emily Dickinson", "Virginia Woolf"],
+                correct: 0
+            },
+            {
+                question: "Which Shakespeare play features the character Hamlet?",
+                options: ["Macbeth", "Romeo and Juliet", "Hamlet", "Othello"],
+                correct: 2
+            },
+            {
+                question: "Who wrote '1984'?",
+                options: ["Aldous Huxley", "George Orwell", "Ray Bradbury", "Kurt Vonnegut"],
+                correct: 1
+            },
+            {
+                question: "What is the first book in the Harry Potter series?",
+                options: ["Chamber of Secrets", "Prisoner of Azkaban", "Philosopher's Stone", "Goblet of Fire"],
+                correct: 2
+            },
+            {
+                question: "Who wrote 'To Kill a Mockingbird'?",
+                options: ["Harper Lee", "Toni Morrison", "Maya Angelou", "Zora Neale Hurston"],
+                correct: 0
+            }
+        ];
+
+        function initializeQuiz() {
+            currentQuizQuestion = 0;
+            quizScore = 0;
+            showQuizQuestion();
+        }
+
+        function showQuizQuestion() {
+            const container = document.getElementById('quiz-question-container');
+            const question = quizQuestions[currentQuizQuestion];
+            
+            container.innerHTML = `
+                <div class="quiz-question active">
+                    <h4 class="text-lg font-semibold mb-4">${question.question}</h4>
+                    <div class="space-y-3">
+                        ${question.options.map((option, index) => 
+                            `<button class="quiz-option w-full p-3 text-left border rounded-lg hover:bg-purple-50" 
+                                     onclick="selectQuizAnswer(${index})" data-index="${index}">
+                                ${String.fromCharCode(65 + index)}) ${option}
+                             </button>`
+                        ).join('')}
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('current-question').textContent = currentQuizQuestion + 1;
+            document.getElementById('quiz-progress').style.width = `${((currentQuizQuestion + 1) / quizQuestions.length) * 100}%`;
+        }
+
+        function selectQuizAnswer(selectedIndex) {
+            const question = quizQuestions[currentQuizQuestion];
+            const options = document.querySelectorAll('.quiz-option');
+            
+            options.forEach((option, index) => {
+                option.disabled = true;
+                if (index === question.correct) {
+                    option.style.backgroundColor = '#dcfce7';
+                    option.style.borderColor = '#16a34a';
+                } else if (index === selectedIndex && index !== question.correct) {
+                    option.style.backgroundColor = '#fecaca';
+                    option.style.borderColor = '#dc2626';
+                }
+            });
+            
+            if (selectedIndex === question.correct) {
+                quizScore += 20;
+            }
+            
+            document.getElementById('game-points').textContent = quizScore;
+            document.getElementById('next-question-btn').classList.remove('hidden');
+        }
+
+        function nextQuestion() {
+            currentQuizQuestion++;
+            document.getElementById('next-question-btn').classList.add('hidden');
+            
+            if (currentQuizQuestion < quizQuestions.length) {
+                showQuizQuestion();
+            } else {
+                setTimeout(() => completeGame(quizScore), 1000);
+            }
+        }
+
+        function showHint() {
+            if (currentUser.points >= 10) {
+                currentUser.points -= 10;
+                updateDashboard();
+                
+                if (currentGameType.includes('crossword')) {
+                    alert('Hint: The first word across is a famous Danish prince!');
+                } else if (currentGameType.includes('anagram')) {
+                    alert('Hint: Think of famous American and British authors!');
+                } else {
+                    alert('Hint: Think carefully about classic literature!');
+                }
+            } else {
+                alert('You need at least 10 points to buy a hint!');
+            }
+        }
+
+        function completeGame(score = null) {
+            if (gameTimer) {
+                clearInterval(gameTimer);
+                gameTimer = null;
+            }
+            
+            const finalScore = score || Math.floor(Math.random() * 50) + 20;
+            currentUser.points += finalScore;
+            
+            // Update the completion modal with the score
+            const modal = document.getElementById('game-completion-modal');
+            modal.querySelector('p').innerHTML = `You scored <span class="font-bold text-purple-600">${finalScore} points</span> in this game!`;
+            modal.classList.remove('hidden');
+        }
+
+        function playAgain() {
+            document.getElementById('game-completion-modal').classList.add('hidden');
+            startTimer();
+        }
+
+        function backToDashboard() {
+            document.getElementById('game-completion-modal').classList.add('hidden');
+            showPage('dashboard');
+        }
+
+        function shareGame() {
+            alert('Game shared! You earned 10 bonus points!');
+            currentUser.points += 10;
+            document.getElementById('game-completion-modal').classList.add('hidden');
+            showPage('dashboard');
+        }
+
+        // Tournament functions
+        function showTournament(tournamentType) {
+            document.getElementById('tournament-modal').classList.remove('hidden');
+        }
+
+        function enterTournament() {
+            if (currentUser.points >= 50) {
+                currentUser.points -= 50;
+                alert('Tournament entry successful! Good luck!');
+                document.getElementById('tournament-modal').classList.add('hidden');
+                startGame('tournament');
+            } else {
+                alert('Insufficient points for tournament entry!');
+            }
+        }
+
+        function closeTournamentModal() {
+            document.getElementById('tournament-modal').classList.add('hidden');
+        }
+
+        // Wallet functions
+        function processWithdrawal() {
+            document.getElementById('withdrawal-support-modal').classList.remove('hidden');
+        }
+
+        function confirmVIPUpgrade() {
+            currentUser.status = 'VIP';
+            alert('VIP upgrade successful! You can now withdraw anytime!');
+            document.getElementById('withdrawal-support-modal').classList.add('hidden');
+            updateDashboard();
+        }
+
+        function closeWithdrawalModal() {
+            document.getElementById('withdrawal-support-modal').classList.add('hidden');
+        }
+
+        function processDeposit() {
+            alert('Deposit submitted successfully! Your account will be updated shortly.');
+        }
+
+        // Referral functions
+        function copyReferralLink() {
+            navigator.clipboard.writeText('https://wordquest.com/refer/Player123');
+            alert('Referral link copied to clipboard!');
+        }
+
+        // Leaderboard functions
+        function showLeaderboard(period) {
+            // Update active button styling
+            document.querySelectorAll('#leaderboard-page button').forEach(btn => {
+                btn.className = 'px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300';
+            });
+            event.target.className = 'px-4 py-2 bg-purple-600 text-white rounded-lg';
+        }
+
+        // Initialize the app
+        document.addEventListener('DOMContentLoaded', function() {
+            updateNavigation();
+            showPage('welcome');
+        });
+    </script>
+<script>
+</html>
